@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Select City</title>
+
+<style>
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background: #f2f2f2;
+}
+
+.header {
+    background: #000;
+    color: white;
+    padding: 14px 18px;
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.search-container {
+    background: #000;
+    padding: 2px;
+    margin: 10px 12px;
+    border-radius: 10px;
+}
+
+.search-input {
+    width: 94%;
+    padding: 10px;
+    border-radius: 8px;
+    border: none;
+    font-size: 16px;
+    outline: none;
+}
+
+.city-list {
+    height: calc(100vh - 160px);
+    overflow-y: auto;
+    padding: 15px;
+}
+
+.city-box {
+    border: 1px solid #ddd;
+    padding: 14px;
+    border-radius: 10px;
+    margin-bottom: 12px;
+    background: #fff;
+    border-left: 6px solid black;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.city-box:hover {
+    background: #eef6ff;
+    transform: scale(1.02);
+}
+</style>
+
+</head>
+<body>
+
+<div class="header">MA Intelligence</div>
+
+<div class="search-container">
+    <input type="text" id="searchInput" class="search-input" placeholder="Search city..." onkeyup="searchCity()">
+</div>
+
+<div class="city-list" id="cityList"></div>
+
+<script>
+// FULL CITY LIST (your data cleaned + deduplicated)
+const cities = [
+"Mian Channu","Karachi","Lahore","Islamabad","Rawalpindi","Faisalabad","Multan","Peshawar","Quetta",
+"Hyderabad","Gujranwala","Sialkot","Sargodha","Bahawalpur","Sukkur","Larkana","Sheikhupura",
+"Rahim Yar Khan","Jhang","Dera Ghazi Khan","Gujrat","Mardan","Kasur","Okara","Mirpur Khas",
+"Chiniot","Nawabshah","Kamoke","Hafizabad","Kohat","Jacobabad","Khanewal","Dera Ismail Khan",
+"Turbat","Muzaffargarh","Mingora","Charsadda","Kamalia","Tando Allahyar","Tando Adam","Kandhkot",
+"Mansehra","Burewala","Chaman","Gwadar","Nowshera","Khuzdar","Hub","Attock","Kotri",
+"Mandi Bahauddin","Swabi","Jhelum","Bahawalnagar","Kharian","Shikarpur","Badin","Lodhran",
+"Khairpur","Vehari","Daska","Gojra","Jaranwala","Shahdadkot","Shahdadpur","Bhakkar",
+"Tando Muhammad Khan","Jatoi","Haripur","Sadiqabad","Thatta","Chishtian","Jampur",
+"Ahmedpur East","Haveli Lakha","Hangu","Kharan","Bannu","Tank","Kot Addu","Chakwal",
+"Talagang","Samundri","Toba Tek Singh","Muzaffarabad","Mirpur (AJK)","Kotli","Gilgit","Skardu",
+"Hunza","Zhob","Loralai","Panjgur","Pasni","Ormara","Awaran","Uthal","Sibi","Kalat",
+"Mastung","Killa Abdullah","Chilas","Shigar","Besham","Battagram","Hassan Abdal","Wah Cantt",
+"Taxila","Kallar Kahar","Pind Dadan Khan","Mianwali","Kundian","Rajanpur","Layyah",
+"Arifwala","Pakpattan","Depalpur","Khanpur","Liaquatpur","Shorkot","Narowal","Dina",
+"Gujar Khan","Murree","Kahuta","Taxila City","Nankana Sahib","Muridke","Chunian"
+];
+
+const cityList = document.getElementById("cityList");
+
+// render cities
+function render(list){
+    cityList.innerHTML = "";
+    list.forEach(city=>{
+        const div = document.createElement("div");
+        div.className = "city-box";
+        div.innerText = city;
+        div.onclick = () => selectCity(city);
+        cityList.appendChild(div);
+    });
+}
+
+render(cities);
+
+// search
+function searchCity(){
+    let input = document.getElementById("searchInput").value.toLowerCase();
+    let filtered = cities.filter(c => c.toLowerCase().includes(input));
+    render(filtered);
+}
+
+// select city
+function selectCity(cityName){
+    localStorage.setItem("selectedCity", cityName);
+    window.location.href = "menu.html?city=" + encodeURIComponent(cityName);
+}
+</script>
+
+</body>
+</html>

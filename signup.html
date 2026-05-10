@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>MA Store Signup</title>
+
+<style>
+body{
+  font-family:Arial;
+  margin:0;
+  text-align:center;
+  background:#fff;
+}
+
+.top{
+  background:black;
+  color:white;
+  padding:15px;
+  font-size:20px;
+  font-weight:bold;
+}
+
+.container{
+  padding:20px;
+  max-width:400px;
+  margin:auto;
+}
+
+input{
+  width:95%;
+  padding:10px;
+  margin:8px 0;
+  border:1px solid #000;
+  border-radius:6px;
+}
+
+button{
+  width:100%;
+  padding:12px;
+  background:black;
+  color:white;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+  font-weight:bold;
+}
+
+.circle{
+  width:120px;
+  height:120px;
+  border-radius:50%;
+  border:2px solid black;
+  margin:15px auto;
+  overflow:hidden;
+  cursor:pointer;
+}
+
+.circle img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+</style>
+</head>
+
+<body>
+
+<div class="top">MA Store</div>
+
+<div class="container">
+
+<div class="circle" onclick="file.click()">
+<img id="img">
+</div>
+
+<input type="file" id="file" style="display:none">
+
+<input id="name" placeholder="Username">
+<input id="pass" type="password" placeholder="Password (required)">
+<input id="dob" placeholder="DD/MM/YYYY">
+
+<button onclick="save()">Create Account</button>
+
+</div>
+
+<script>
+file.onchange = e => {
+  let r = new FileReader();
+  r.onload = ev => {
+    img.src = ev.target.result;
+    localStorage.setItem("userImage", ev.target.result);
+  }
+  r.readAsDataURL(file.files[0]);
+}
+
+function save(){
+  const name = document.getElementById("name").value;
+  const pass = document.getElementById("pass").value;
+  const dob = document.getElementById("dob").value;
+
+  if(!name || !pass){
+    alert("Username and Password required");
+    return;
+  }
+
+  localStorage.setItem("userName", name);
+  localStorage.setItem("userPass", pass);
+  localStorage.setItem("userDOB", dob);
+
+  window.location.href = "home.html";
+}
+</script>
+
+</body>
+</html>
