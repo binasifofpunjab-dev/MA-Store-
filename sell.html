@@ -114,20 +114,35 @@ document.getElementById("file").onchange = function(e){
 function upload(){
   const city = localStorage.getItem("selectedCity");
 
-  db.ref("posts").push({
-    price: price.value,
-    description: desc.value,
-    contact: contact.value,
+  const price = document.getElementById("price").value;
+  const desc = document.getElementById("desc").value;
+  const contact = document.getElementById("contact").value;
+
+  if(!price || !desc || !contact || !imageURL || !city){
+    alert("Please fill all fields and select image + city");
+    return;
+  }
+
+  const newPostRef = db.ref("posts").push();
+
+  newPostRef.set({
+    price: price,
+    description: desc,
+    contact: contact,
     imageURL: imageURL,
     city: city
+  })
+  .then(() => {
+    alert("✅ Post Uploaded Successfully!");
+    
+    document.getElementById("price").value = "";
+    document.getElementById("desc").value = "";
+    document.getElementById("contact").value = "";
+    document.getElementById("preview").style.display = "none";
+  })
+  .catch((error) => {
+    alert("❌ Upload Failed: " + error.message);
   });
-
-  alert("Post Uploaded!");
-
-  price.value = "";
-  desc.value = "";
-  contact.value = "";
-  document.getElementById("preview").style.display = "none";
 }
 </script>
 
