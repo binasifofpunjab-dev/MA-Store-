@@ -100,7 +100,7 @@ function load(){
     if(!data) return;
 
     Object.values(data).forEach(p=>{
-      if(p.city === city){
+      if((p.city || "").trim().toLowerCase() === (city || "").trim().toLowerCase()){
         const div = document.createElement("div");
         div.className="card";
 
