@@ -6,7 +6,11 @@
 <title>Sell - MA Store</title>
 
 <style>
-body{margin:0;font-family:Arial;background:#f5f5f5;}
+body{
+  margin:0;
+  font-family:Arial;
+  background:#f5f5f5;
+}
 
 .topbar{
   background:black;
@@ -17,7 +21,9 @@ body{margin:0;font-family:Arial;background:#f5f5f5;}
   font-weight:bold;
 }
 
-.container{padding:15px;}
+.container{
+  padding:15px;
+}
 
 .card{
   background:white;
@@ -26,12 +32,13 @@ body{margin:0;font-family:Arial;background:#f5f5f5;}
   box-shadow:0 2px 8px rgba(0,0,0,0.1);
 }
 
-input,textarea{
+input,textarea,select{
   width:100%;
   padding:12px;
   margin-top:10px;
   border-radius:8px;
   border:1px solid #ccc;
+  box-sizing:border-box;
 }
 
 button{
@@ -43,6 +50,7 @@ button{
   border:none;
   border-radius:8px;
   font-weight:bold;
+  cursor:pointer;
 }
 
 .preview{
@@ -61,15 +69,35 @@ button{
 
 <div class="card">
 
-<!-- IMAGE -->
 <input type="file" id="file" accept="image/*" style="display:none;">
 <button onclick="document.getElementById('file').click()">Add Image</button>
 
 <img id="preview" class="preview">
 
-<!-- DATA -->
+<input id="productName" placeholder="Product Name">
+
 <input id="price" placeholder="Price">
+
+<select id="category">
+  <option value="">Select Category</option>
+  <option>Grocery</option>
+  <option>Stationery</option>
+  <option>Electronics</option>
+  <option>Fashion</option>
+  <option>Beauty</option>
+  <option>Mobile Accessories</option>
+  <option>Home Items</option>
+  <option>Kitchen</option>
+  <option>Sports</option>
+  <option>Books</option>
+  <option>Toys</option>
+  <option>Health</option>
+  <option>Services</option>
+  <option>Other</option>
+</select>
+
 <textarea id="desc" placeholder="Description"></textarea>
+
 <input id="contact" placeholder="WhatsApp number OR link">
 
 <button onclick="upload()">Submit Post</button>
@@ -78,16 +106,18 @@ button{
 
 </div>
 
-<!-- FIREBASE -->
 <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
 
 <script>
 const firebaseConfig = {
-  apiKey: "AIzaSyB9Jt_TdznUMTHQuZIZgy1WYSmJ1RyWasQ",
-  authDomain: "ma-intelligence-6077c.firebaseapp.com",
-  databaseURL: "https://ma-intelligence-6077c-default-rtdb.firebaseio.com",
-  projectId: "ma-intelligence-6077c"
+  apiKey: "AIzaSyC_U7GepUGJ8h5avnvkraTA9lbg9qkQNb4",
+  authDomain: "ma-store-db.firebaseapp.com",
+  databaseURL: "https://ma-store-db-default-rtdb.firebaseio.com",
+  projectId: "ma-store-db",
+  storageBucket: "ma-store-db.firebasestorage.app",
+  messagingSenderId: "908345917509",
+  appId: "1:908345917509:web:c72e1b1de6d82fd486a32c"
 };
 
 firebase.initializeApp(firebaseConfig);
@@ -95,54 +125,80 @@ const db = firebase.database();
 
 let imageURL = "";
 
-/* IMAGE SELECT */
 document.getElementById("file").onchange = function(e){
+
   const file = e.target.files[0];
+
   const reader = new FileReader();
 
   reader.onload = function(ev){
+
     imageURL = ev.target.result;
+
     const img = document.getElementById("preview");
+
     img.src = imageURL;
+
     img.style.display = "block";
   };
 
   reader.readAsDataURL(file);
 };
 
-/* UPLOAD */
 function upload(){
+
   const city = localStorage.getItem("selectedCity");
 
+  const productName = document.getElementById("productName").value;
+
   const price = document.getElementById("price").value;
+
+  const category = document.getElementById("category").value;
+
   const desc = document.getElementById("desc").value;
+
   const contact = document.getElementById("contact").value;
 
-  if(!price || !desc || !contact || !imageURL || !city){
-    alert("Please fill all fields and select image + city");
+  if(!productName || !price || !category || !desc || !contact || !imageURL || !city){
+
+    alert("Please fill all fields");
+
     return;
   }
 
   const newPostRef = db.ref("posts").push();
 
   newPostRef.set({
+    productName: productName,
     price: price,
+    category: category,
     description: desc,
     contact: contact,
     imageURL: imageURL,
-    city: city
+    city: city,
+    timestamp: Date.now()
   })
+
   .then(() => {
-    alert("✅ Post Uploaded Successfully!");
-    
+
+    alert("✅ Product Uploaded");
+
+    document.getElementById("productName").value = "";
     document.getElementById("price").value = "";
+    document.getElementById("category").value = "";
     document.getElementById("desc").value = "";
     document.getElementById("contact").value = "";
+
     document.getElementById("preview").style.display = "none";
+
   })
+
   .catch((error) => {
-    alert("❌ Upload Failed: " + error.message);
+
+    alert(error.message);
+
   });
+
 }
 </script>
 
